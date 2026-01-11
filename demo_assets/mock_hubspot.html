@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>D-1042 - Enterprise SaaS Implementation | HubSpot</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='20' font-size='20'>🔶</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Lexend', 'Avenir Next', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f8fa;
+            padding: 0;
+        }
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid #eaf0f6;
+            padding: 0 24px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .logo {
+            background: #ff7a59;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .breadcrumb {
+            color: #506071;
+            font-size: 14px;
+        }
+        .breadcrumb span { color: #cbd6e2; margin: 0 8px; }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .content {
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 0 24px;
+        }
+        .page-header {
+            margin-bottom: 24px;
+        }
+        .deal-title {
+            font-size: 28px;
+            color: #33475b;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        .deal-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .deal-stage {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #00c875 0%, #00a862 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 4px rgba(0,200,117,0.2);
+        }
+        .deal-id {
+            color: #7c98b6;
+            font-size: 13px;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02);
+            border: 1px solid #eaf0f6;
+        }
+        .section-title {
+            font-size: 14px;
+            color: #7c98b6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+        .property {
+            display: flex;
+            flex-direction: column;
+        }
+        .property-label {
+            font-size: 12px;
+            color: #7c98b6;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .property-value {
+            font-size: 16px;
+            color: #33475b;
+            font-weight: 500;
+        }
+        .property-value.large {
+            font-size: 28px;
+            color: #00c875;
+            font-weight: 700;
+        }
+        .activity-bar {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #eaf0f6;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #7c98b6;
+            font-size: 13px;
+        }
+        .activity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00c875;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="logo">HubSpot</div>
+            <div class="breadcrumb">Sales <span>›</span> Deals <span>›</span> D-1042</div>
+        </div>
+        <div class="topbar-right">
+            <div class="user-avatar">SM</div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="page-header">
+            <div class="deal-title">Enterprise SaaS Implementation</div>
+            <div class="deal-meta">
+                <span class="deal-stage">✓ CLOSED WON</span>
+                <span class="deal-id">Deal ID: D-1042</span>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="section-title">Deal Properties</div>
+            <div class="properties-grid">
+                <div class="property">
+                    <div class="property-label">Deal Amount</div>
+                    <div class="property-value large">$24,500</div>
+                </div>
+                
+                <div class="property">
+                    <div class="property-label">Close Date</div>
+                    <div class="property-value">January 8, 2026</div>
+                </div>
+                
+                <div class="property">
+                    <div class="property-label">Deal Stage</div>
+                    <div class="property-value">Closed Won</div>
+                </div>
+                
+                <div class="property">
+                    <div class="property-label">Contact Name</div>
+                    <div class="property-value">John Smith</div>
+                </div>
+                
+                <div class="property">
+                    <div class="property-label">Company Name</div>
+                    <div class="property-value">Acme Corp</div>
+                </div>
+                
+                <div class="property">
+                    <div class="property-label">Deal Owner</div>
+                    <div class="property-value">Sarah Mitchell</div>
+                </div>
+                
+                <div class="property">
+                    <div class="property-label">Deal Type</div>
+                    <div class="property-value">New Business</div>
+                </div>
+                
+                <div class="property">
+                    <div class="property-label">Pipeline</div>
+                    <div class="property-value">Sales Pipeline</div>
+                </div>
+                
+                <div class="property">
+                    <div class="property-label">Create Date</div>
+                    <div class="property-value">December 15, 2025</div>
+                </div>
+            </div>
+            
+            <div class="activity-bar">
+                <div class="activity-dot"></div>
+                <span>Updated 2 hours ago by Sarah Mitchell</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Acme Corp - SaaS Implementation | Asana</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='20' font-size='20'>🔴</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #ffffff;
+            padding: 0;
+        }
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e8ecee;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .logo {
+            color: #f06a6a;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .breadcrumb {
+            color: #6d6e6f;
+            font-size: 14px;
+        }
+        .breadcrumb span { color: #d0d4d7; margin: 0 8px; }
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 60px;
+            width: 240px;
+            height: calc(100vh - 60px);
+            background: #fcfcfd;
+            border-right: 1px solid #e8ecee;
+            padding: 20px 16px;
+        }
+        .main-content {
+            margin-left: 240px;
+            padding: 32px;
+        }
+        .project-header {
+            margin-bottom: 28px;
+        }
+        .project-title {
+            font-size: 28px;
+            color: #151b26;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        .project-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #7bc86c 0%, #5fa757 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(123,200,108,0.25);
+        }
+        .project-id {
+            color: #9ca6af;
+            font-size: 13px;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        .overview-card {
+            background: #fcfcfd;
+            border: 1px solid #e8ecee;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-title {
+            font-size: 13px;
+            color: #6d6e6f;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .fields-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+        .field-label {
+            font-size: 12px;
+            color: #9ca6af;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .field-value {
+            font-size: 15px;
+            color: #151b26;
+            font-weight: 500;
+        }
+        .tasks-section {
+            margin-top: 32px;
+        }
+        .section-header {
+            font-size: 16px;
+            color: #151b26;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .task-count {
+            background: #e8ecee;
+            color: #6d6e6f;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .task-list {
+            background: white;
+            border: 1px solid #e8ecee;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .task-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f5f7f8;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.15s;
+        }
+        .task-item:last-child { border-bottom: none; }
+        .task-item:hover { background: #fcfcfd; }
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #7bc86c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .task-name {
+            font-size: 14px;
+            color: #151b26;
+            flex-grow: 1;
+        }
+        .task-assignee {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .activity-footer {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid #e8ecee;
+            color: #9ca6af;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .activity-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #7bc86c;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.95); }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="logo">asana</div>
+            <div class="breadcrumb">Projects <span>›</span> Delivery <span>›</span> Acme Corp Implementation</div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="project-header">
+            <div class="project-title">Acme Corp - SaaS Implementation</div>
+            <div class="project-meta">
+                <span class="status-badge">✓ IN PROGRESS</span>
+                <span class="project-id">Project ID: PRJ-1042</span>
+            </div>
+        </div>
+        
+        <div class="overview-card">
+            <div class="card-title">Project Overview</div>
+            <div class="fields-grid">
+                <div class="field">
+                    <div class="field-label">Client Name</div>
+                    <div class="field-value">Acme Corp</div>
+                </div>
+                
+                <div class="field">
+                    <div class="field-label">Project Manager</div>
+                    <div class="field-value">Mike Torres</div>
+                </div>
+                
+                <div class="field">
+                    <div class="field-label">Start Date</div>
+                    <div class="field-value">January 9, 2026</div>
+                </div>
+                
+                <div class="field">
+                    <div class="field-label">Project Status</div>
+                    <div class="field-value">Active - In Progress</div>
+                </div>
+                
+                <div class="field">
+                    <div class="field-label">Team Size</div>
+                    <div class="field-value">5 members</div>
+                </div>
+                
+                <div class="field">
+                    <div class="field-label">Next Milestone</div>
+                    <div class="field-value">Requirements Gathering</div>
+                </div>
+                
+                <div class="field">
+                    <div class="field-label">Est. Completion</div>
+                    <div class="field-value">March 15, 2026</div>
+                </div>
+                
+                <div class="field">
+                    <div class="field-label">Priority</div>
+                    <div class="field-value">High</div>
+                </div>
+                
+                <div class="field">
+                    <div class="field-label">Budget</div>
+                    <div class="field-value">$24,500</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tasks-section">
+            <div class="section-header">
+                Recently Completed Tasks
+                <span class="task-count">3</span>
+            </div>
+            <div class="task-list">
+                <div class="task-item">
+                    <div class="task-checkbox">✓</div>
+                    <div class="task-name">Initial kickoff call with client stakeholders</div>
+                    <div class="task-assignee">MT</div>
+                </div>
+                <div class="task-item">
+                    <div class="task-checkbox">✓</div>
+                    <div class="task-name">Internal team briefing and role assignments</div>
+                    <div class="task-assignee">MT</div>
+                </div>
+                <div class="task-item">
+                    <div class="task-checkbox">✓</div>
+                    <div class="task-name">Set up project workspace and access credentials</div>
+                    <div class="task-assignee">JD</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="activity-footer">
+            <div class="activity-pulse"></div>
+            <span>Last updated: 2 hours ago by Mike Torres • 3 tasks completed this week</span>
+        </div>
+    </div>
+</body>
+</html>
