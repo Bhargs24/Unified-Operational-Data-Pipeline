@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Deal D-1042 - Enterprise SaaS Implementation | SalesFlow CRM</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' fill='%234F46E5'/></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+        
+        /* Top Navigation */
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-content {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #4F46E5;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .breadcrumb {
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .breadcrumb-sep {
+            color: #cbd5e1;
+            margin: 0 8px;
+        }
+        
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+        
+        /* Deal Header */
+        .deal-header {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .deal-title-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+        
+        .deal-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+        
+        .deal-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .deal-id {
+            font-family: 'Courier New', monospace;
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-icon {
+            width: 18px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        /* Properties Grid */
+        .properties-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .property-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .property-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .property-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        .property-value.highlight {
+            font-size: 32px;
+            color: #10b981;
+            font-weight: 800;
+        }
+        
+        /* Activity Timeline */
+        .activity-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            background: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4F46E5;
+            font-size: 14px;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        .activity-meta {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        
+        .sync-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .sync-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.95); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo-section">
+                <div class="logo">
+                    <div class="logo-icon">SF</div>
+                    <span>SalesFlow</span>
+                </div>
+                <div class="breadcrumb">
+                    Deals <span class="breadcrumb-sep">›</span> 
+                    Pipeline <span class="breadcrumb-sep">›</span> 
+                    D-1042
+                </div>
+            </div>
+            <div class="user-section">
+                <div class="user-avatar">SM</div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="deal-header">
+            <div class="deal-title-section">
+                <div>
+                    <h1 class="deal-title">Enterprise SaaS Implementation</h1>
+                    <div class="deal-subtitle">
+                        <span class="deal-id">D-1042</span>
+                        <span>•</span>
+                        <span>Acme Corporation</span>
+                    </div>
+                </div>
+                <div class="status-badge">
+                    <div class="status-icon">✓</div>
+                    <span>CLOSED WON</span>
+                </div>
+            </div>
+            
+            <div class="properties-section">
+                <div class="property-group">
+                    <div class="property-label">Deal Amount</div>
+                    <div class="property-value highlight">$24,500</div>
+                </div>
+                
+                <div class="property-group">
+                    <div class="property-label">Close Date</div>
+                    <div class="property-value">January 8, 2026</div>
+                </div>
+                
+                <div class="property-group">
+                    <div class="property-label">Deal Stage</div>
+                    <div class="property-value">Closed Won</div>
+                </div>
+                
+                <div class="property-group">
+                    <div class="property-label">Primary Contact</div>
+                    <div class="property-value">John Smith</div>
+                </div>
+                
+                <div class="property-group">
+                    <div class="property-label">Company Name</div>
+                    <div class="property-value">Acme Corp</div>
+                </div>
+                
+                <div class="property-group">
+                    <div class="property-label">Deal Owner</div>
+                    <div class="property-value">Sarah Mitchell</div>
+                </div>
+                
+                <div class="property-group">
+                    <div class="property-label">Deal Type</div>
+                    <div class="property-value">New Business</div>
+                </div>
+                
+                <div class="property-group">
+                    <div class="property-label">Expected Revenue</div>
+                    <div class="property-value">$24,500</div>
+                </div>
+            </div>
+            
+            <div class="sync-indicator">
+                <div class="sync-dot"></div>
+                <span>Last synced: 2 minutes ago</span>
+            </div>
+        </div>
+        
+        <div class="activity-section">
+            <h2 class="section-title">Recent Activity</h2>
+            
+            <div class="activity-item">
+                <div class="activity-icon">✓</div>
+                <div class="activity-content">
+                    <div class="activity-title">Deal marked as Closed Won</div>
+                    <div class="activity-meta">Sarah Mitchell • 2 hours ago</div>
+                </div>
+            </div>
+            
+            <div class="activity-item">
+                <div class="activity-icon">📄</div>
+                <div class="activity-content">
+                    <div class="activity-title">Contract signed by John Smith</div>
+                    <div class="activity-meta">System • 3 hours ago</div>
+                </div>
+            </div>
+            
+            <div class="activity-item">
+                <div class="activity-icon">💬</div>
+                <div class="activity-content">
+                    <div class="activity-title">Final negotiation call completed</div>
+                    <div class="activity-meta">Sarah Mitchell • January 8, 2026</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

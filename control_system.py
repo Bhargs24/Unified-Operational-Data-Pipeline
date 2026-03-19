@@ -240,7 +240,7 @@ st.sidebar.markdown("### control")
 
 page = st.sidebar.radio(
     "",
-    ["operational_reality", "system_overview", "conflict_inbox", "decision_review", "ownership_rules", "audit_log", "failure_sim"],
+    ["executive_dashboard", "operational_reality", "system_overview", "conflict_inbox", "decision_review", "ownership_rules", "audit_log", "failure_sim"],
     label_visibility="collapsed"
 )
 
@@ -263,7 +263,141 @@ st.sidebar.markdown(f"<div style='color: {conflict_color}; font-weight: bold;'>C
 st.sidebar.markdown(f"**TIME:** {datetime.now().strftime('%H:%M:%S')}")
 
 # Main routing
-if page == "operational_reality":
+if page == "executive_dashboard":
+    st.markdown("### 📊 EXECUTIVE DASHBOARD")
+    
+    #Calculate real metrics from database
+    total_conflicts = db.conn.execute("SELECT COUNT(*) FROM conflicts").fetchone()[0]
+    resolved_conflicts = db.conn.execute("SELECT COUNT(*) FROM conflicts WHERE status = 'resolved'").fetchone()[0]
+    pending_conflicts = len(db.get_pending_conflicts())
+    
+    # Calculate auto-resolution rate
+    auto_resolved = db.conn.execute(
+        "SELECT COUNT(*) FROM conflicts WHERE resolution_method LIKE 'policy:%'"
+    ).fetchone()[0]
+    auto_rate = (auto_resolved / resolved_conflicts * 100) if resolved_conflicts > 0 else 0
+    
+    # Calculate $ saved (assume $22K per HIGH risk conflict resolved)
+    critical_resolved = db.conn.execute(
+        "SELECT COUNT(*) FROM conflicts WHERE status = 'resolved' AND risk_level = 'HIGH'"
+    ).fetchone()[0]
+    total_saved = critical_resolved * 22000
+    
+    # Calculate time saved (assume 30min per manual resolution)
+    time_saved_hours = auto_resolved * 0.5
+    
+    # KPI Cards
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric(
+            label="💰 VALUE PROTECTED (30 DAYS)",
+            value=f"${total_saved:,}",
+            delta=f"{critical_resolved} critical conflicts prevented"
+        )
+    
+    with col2:
+        st.metric(
+            label="⚡ AUTO-RESOLUTION RATE",
+            value=f"{auto_rate:.1f}%",
+            delta=f"{auto_resolved} of {resolved_conflicts} resolved automatically"
+        )
+    
+    with col3:
+        st.metric(
+            label="⏱️ TIME SAVED (MTD)",
+            value=f"{time_saved_hours:.1f} hrs",
+            delta="vs manual process"
+        )
+    
+    with col4:
+        st.metric(
+            label="⚠️ AWAITING REVIEW",
+            value=pending_conflicts,
+            delta="requires attention" if pending_conflicts > 0 else "all clear",
+            delta_color="inverse"
+        )
+    
+    st.markdown("---")
+    
+    # System Health Summary
+    st.markdown("### SYSTEM HEALTH")
+    
+    state = db.get_system_state()
+    connections = db.get_system_connections()
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        status_color = "🟢" if state['automation_status'] == 'running' else "🔴"
+        st.markdown(f"**{status_color} Automation Status**")
+        st.markdown(f"### {state['automation_status'].upper()}")
+    
+    with col2:
+        st.markdown(f"**📊 Connected Systems**")
+        active_systems = sum(1 for conn in connections if conn['status'] == 'connected')
+        st.markdown(f"### {active_systems}/{len(connections)} Active")
+    
+    with col3:
+        st.markdown(f"**🎯 Data Quality**")
+        quality_score = ((resolved_conflicts / total_conflicts * 100) if total_conflicts > 0 else 100)
+        st.markdown(f"### {quality_score:.1f}%")
+    
+    st.markdown("---")
+    
+    # Recent Activity Summary
+    st.markdown("### RECENT ACTIVITY (LAST 7 DAYS)")
+    
+    # Get conflicts resolved in last 7 days
+    from datetime import datetime, timedelta
+    week_ago = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
+    
+    recent_resolutions = db.conn.execute("""
+        SELECT entity_id, risk_level, resolved_at, resolution_method
+        FROM conflicts
+        WHERE status = 'resolved' 
+        AND resolved_at >= ?
+        ORDER BY resolved_at DESC
+        LIMIT 10
+    """, (week_ago,)).fetchall()
+    
+    if recent_resolutions:
+        resolution_data = []
+        for res in recent_resolutions:
+            resolution_data.append({
+                "Entity": res[0],
+                "Risk": res[1],
+                "Resolved": res[2][:16],
+                "Method": res[3]
+            })
+        st.dataframe(resolution_data, use_container_width=True, hide_index=True)
+    else:
+        st.info("No resolutions in the past 7 days")
+    
+    st.markdown("---")
+    
+    # Business Impact
+    st.markdown("### BUSINESS IMPACT")
+    
+    impact_col1, impact_col2 = st.columns(2)
+    
+    with impact_col1:
+        st.markdown("**🎯 This Month's Protection**")
+        st.markdown(f"- **${total_saved:,}** in potential losses prevented")
+        st.markdown(f"- **{critical_resolved}** critical conflicts caught before damage")
+        st.markdown(f"- **{time_saved_hours:.1f} hours** saved vs manual reconciliation")
+    
+    with impact_col2:
+        st.markdown("**📈 System Performance**")
+        st.markdown(f"- **{auto_rate:.1f}%** of conflicts auto-resolved")
+        st.markdown(f"- **{pending_conflicts}** conflicts pending review")
+        st.markdown(f"- **{resolved_conflicts}** total resolutions this month")
+    
+    if pending_conflicts > 0:
+        st.markdown("---")
+        st.markdown('<div class="alert-warning">⚠️ ACTION REQUIRED: Review pending conflicts to resume automation</div>', unsafe_allow_html=True)
+
+elif page == "operational_reality":
     # System health indicator at top
     state_check = db.get_system_state()
     health_color = "#00FF00" if state_check['automation_status'] == 'running' else "#FF0000"

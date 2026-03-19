@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project: Acme Corp Implementation | TaskFlow Pro</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' fill='%23f97316'/></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+        
+        /* Top Navigation */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-content {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #f97316;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .breadcrumb {
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .breadcrumb-sep {
+            color: #cbd5e1;
+            margin: 0 8px;
+        }
+        
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+        
+        /* Project Header */
+        .project-header {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 24px;
+        }
+        
+        .project-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+        
+        .project-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .project-id {
+            font-family: 'Courier New', monospace;
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+        }
+        
+        .status-icon {
+            width: 18px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .progress-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e40af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .progress-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e40af;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+            width: 15%;
+            transition: width 0.3s ease;
+        }
+        
+        /* Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .detail-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .detail-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        /* Tasks Section */
+        .tasks-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .task-count {
+            background: #f97316;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+        
+        .task-item:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+        }
+        
+        .task-checkbox {
+            width: 24px;
+            height: 24px;
+            background: #10b981;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .task-content {
+            flex: 1;
+        }
+        
+        .task-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+        
+        .task-meta {
+            font-size: 12px;
+            color: #64748b;
+        }
+        
+        .task-assignee {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Team Section */
+        .team-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .team-members {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .team-member {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .member-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            border: 3px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .member-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+        }
+        
+        .sync-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .sync-dot {
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.95); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo-section">
+                <div class="logo">
+                    <div class="logo-icon">✓</div>
+                    <span>TaskFlow</span>
+                </div>
+                <div class="breadcrumb">
+                    Projects <span class="breadcrumb-sep">›</span> 
+                    Delivery <span class="breadcrumb-sep">›</span> 
+                    Acme Corp
+                </div>
+            </div>
+            <div class="user-section">
+                <div class="user-avatar">MT</div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="project-header">
+            <div class="header-top">
+                <div>
+                    <h1 class="project-title">Acme Corp - SaaS Implementation</h1>
+                    <div class="project-subtitle">
+                        <span class="project-id">PRJ-1042</span>
+                        <span>•</span>
+                        <span>Implementation Services</span>
+                    </div>
+                </div>
+                <div class="status-badge">
+                    <div class="status-icon">▶</div>
+                    <span>IN PROGRESS</span>
+                </div>
+            </div>
+            
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div class="progress-label">Project Progress</div>
+                    <div class="progress-value">15% Complete</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+            
+            <div class="details-grid">
+                <div class="detail-group">
+                    <div class="detail-label">Client Name</div>
+                    <div class="detail-value">Acme Corp</div>
+                </div>
+                
+                <div class="detail-group">
+                    <div class="detail-label">Project Manager</div>
+                    <div class="detail-value">Mike Torres</div>
+                </div>
+                
+                <div class="detail-group">
+                    <div class="detail-label">Start Date</div>
+                    <div class="detail-value">January 9, 2026</div>
+                </div>
+                
+                <div class="detail-group">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value">Active - In Progress</div>
+                </div>
+                
+                <div class="detail-group">
+                    <div class="detail-label">Team Size</div>
+                    <div class="detail-value">5 Members</div>
+                </div>
+                
+                <div class="detail-group">
+                    <div class="detail-label">Next Milestone</div>
+                    <div class="detail-value">Requirements Gathering</div>
+                </div>
+                
+                <div class="detail-group">
+                    <div class="detail-label">Target Completion</div>
+                    <div class="detail-value">March 15, 2026</div>
+                </div>
+                
+                <div class="detail-group">
+                    <div class="detail-label">Project Budget</div>
+                    <div class="detail-value">$24,500</div>
+                </div>
+            </div>
+            
+            <div class="sync-indicator">
+                <div class="sync-dot"></div>
+                <span>Last synced: 2 minutes ago</span>
+            </div>
+        </div>
+        
+        <div class="tasks-section">
+            <h2 class="section-title">
+                Recently Completed Tasks
+                <span class="task-count">3</span>
+            </h2>
+            
+            <div class="task-item">
+                <div class="task-checkbox">✓</div>
+                <div class="task-content">
+                    <div class="task-title">Initial kickoff call with client stakeholders</div>
+                    <div class="task-meta">Completed 2 hours ago</div>
+                </div>
+                <div class="task-assignee">MT</div>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-checkbox">✓</div>
+                <div class="task-content">
+                    <div class="task-title">Internal team briefing and role assignments</div>
+                    <div class="task-meta">Completed 3 hours ago</div>
+                </div>
+                <div class="task-assignee">MT</div>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-checkbox">✓</div>
+                <div class="task-content">
+                    <div class="task-title">Set up project workspace and access credentials</div>
+                    <div class="task-meta">Completed yesterday</div>
+                </div>
+                <div class="task-assignee">JD</div>
+            </div>
+        </div>
+        
+        <div class="team-section">
+            <h2 class="section-title">Project Team</h2>
+            <div class="team-members">
+                <div class="team-member">
+                    <div class="member-avatar">MT</div>
+                    <div class="member-name">Mike T.</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">JD</div>
+                    <div class="member-name">Jane D.</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">RK</div>
+                    <div class="member-name">Ryan K.</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">AL</div>
+                    <div class="member-name">Amy L.</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">DP</div>
+                    <div class="member-name">David P.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
